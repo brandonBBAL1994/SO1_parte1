@@ -1,0 +1,23 @@
+[
+    {
+        "Nombre": "Neto Bran",
+        "Departamento": "Guatemala",
+        "Edad": 25,
+        "Forma de contagio": "Comunitario",
+        "Estado": "Activo"
+    },
+    {
+        "Nombre": "Aironmen",
+        "Departamento": "Zacapa",
+        "Edad": 50,
+        "Forma de contagio": "Comunitario",
+        "Estado": "Recuperado"
+    },
+    {
+        "Nombre": "Otro Aironmen",
+        "Departamento": "Peten",
+        "Edad": 25,
+        "Forma de contagio": "Comunitario",
+        "Estado": "Fallecido"
+    }
+]
