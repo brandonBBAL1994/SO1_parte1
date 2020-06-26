@@ -6,18 +6,25 @@ import (
 	"math/rand"
 	"io/ioutil"
 	//"log"
-	//"net/http"
-	//"bytes"
+	"net/http"
+	"bytes"
 	"encoding/json"
-	//"strconv"
 )
 
-type Caso struct {
+type Caso struct { //estructura para la leída de archivos
 	Nombre string `json:"Nombre"`
 	Departamento string `json:"Departamento"`
 	Edad int `json:"Edad"`
-	FormadeContagio string `json:"Forma de contagio"`
+	FormaContagio string `json:"Forma de contagio"`
 	Estado string `json:"Estado"`
+}
+
+type CasoConvertido struct{//estructura para enviar el json
+	Nombre string `json:"nombre"`
+	Departamento string `json:"departamento"`
+	Edad int `json:"edad"`
+	FormaContagio string `json:"forma_contagio"`
+	Estado string `json:"estado"`
 }
 
 func main() {
@@ -63,7 +70,7 @@ func main() {
 		fmt.Println("Ruta del Archivo:")
 		fmt.Scanln(&ruta_archivo)
 		*/
-		url = "a.tk"
+		url = "http://localhost:3000/"
 		num_hilos = 5
 		num_solicitudes = 10
 		ruta_archivo = "a.json"
@@ -112,24 +119,11 @@ func miHilo(hiloActual int, casosAEnviar int, arregloCasos []Caso, url string){
 }
 
 func peticion(caso Caso, url string){
-	//http://localhost:5000
-
-	//values := map[string]string{"Nombre": caso.Nombre, "Departamento": caso.Departamento,"Edad":strconv.Itoa(caso.Edad),"Forma":caso.FormadeContagio,"Estado":caso.Estado}
-	fmt.Println(caso.Nombre)
-	/*
-	jsonValue, _ := json.Marshal(values)
-	
+	casoEnviar := CasoConvertido { caso.Nombre, caso.Departamento, caso.Edad, caso.FormaContagio, caso.Estado }
+	jsonValue, _ := json.Marshal(casoEnviar)
 	resp, err := http.Post(url,"application/json",bytes.NewBuffer(jsonValue))
     if(err != nil){
-		//log.Fatalln(err)
 		fmt.Println(err)
     }
-
-	
     defer resp.Body.Close()
-
-    body, err := ioutil.ReadAll(resp.Body)
-    
-	fmt.Println(string(body))
-	*/
 }
