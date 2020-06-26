@@ -13,8 +13,8 @@ import(
 type Caso struct{
 	Nombre string `json:"nombre"`
 	Departamento string `json:"departamento"`
-	Edad int `json:"edad"`
-	FormaContagio string `json:"forma_contagio"`
+	Edad string `json:"edad"`
+	FormaContagio string `json:"forma"`
 	Estado string `json:"estado"`
 }
 
@@ -22,6 +22,8 @@ func CrearCaso(w http.ResponseWriter, req *http.Request){
 	var nuevoCaso Caso
 	_ = json.NewDecoder(req.Body).Decode(&nuevoCaso)
 	json.NewEncoder(w).Encode(nuevoCaso)
+	//fmt.Println(nuevoCaso.Nombre , ", ", nuevoCaso.Departamento, ", " , nuevoCaso.Edad, ", ", nuevoCaso.FormaContagio, ", ", nuevoCaso.Estado)
+	
 
 	//aqui debo mandar a la url por post del servidor de colas de nats de go..... la url debe ser estática
 	jsonValue, _ := json.Marshal(nuevoCaso)
@@ -30,7 +32,6 @@ func CrearCaso(w http.ResponseWriter, req *http.Request){
 		fmt.Println(err)
     }
     defer resp.Body.Close()
-
 }
 
 func main(){
