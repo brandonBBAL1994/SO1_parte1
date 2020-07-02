@@ -1,12 +1,13 @@
 package main
 
 import(
-	"encoding/json"
-	"log"
-	"net/http"
+	"encoding/json" //codificar y decodificar json
+	"log" //ver errores en servidor
+	"net/http" //peticiones, funcionalidad web
 	"github.com/gorilla/mux"
-	"fmt"
+	"fmt"  //esta es para imprimir en consola
 	"bytes"
+	//"strconv" //esta es para conversiones
 )
 
 type Caso struct{
@@ -17,13 +18,15 @@ type Caso struct{
 	Estado string `json:"estado"`
 }
 
+
 func CrearCaso(w http.ResponseWriter, req *http.Request){
 	var nuevoCaso Caso
 	_ = json.NewDecoder(req.Body).Decode(&nuevoCaso)
-	json.NewEncoder(w).Encode(nuevoCaso)
 
+	json.NewEncoder(w).Encode(nuevoCaso)
+	
 	jsonValue, _ := json.Marshal(nuevoCaso)
-	resp, err := http.Post("http://35.223.179.117:30029/ingreso","application/json",bytes.NewBuffer(jsonValue))
+	resp, err := http.Post("http://35.192.19.126:31338/ingreso","application/json",bytes.NewBuffer(jsonValue))
     if(err != nil){
 		fmt.Println(err)
     }
@@ -33,5 +36,5 @@ func CrearCaso(w http.ResponseWriter, req *http.Request){
 func main(){
 	router := mux.NewRouter()
 	router.HandleFunc("/", CrearCaso).Methods("POST")
-	log.Fatal(http.ListenAndServe(":3000", router))
+	log.Fatal(http.ListenAndServe(":4000", router))
 }

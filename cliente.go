@@ -2,13 +2,12 @@ package main
 
 import (
 	"fmt"
-	//"time"
 	"math/rand"
 	"io/ioutil"
-	//"log"
 	"net/http"
 	"bytes"
 	"encoding/json"
+	"strconv"
 )
 
 type Caso struct { //estructura para la leída de archivos
@@ -22,8 +21,8 @@ type Caso struct { //estructura para la leída de archivos
 type CasoConvertido struct{//estructura para enviar el json
 	Nombre string `json:"nombre"`
 	Departamento string `json:"departamento"`
-	Edad int `json:"edad"`
-	FormaContagio string `json:"forma_contagio"`
+	Edad string `json:"edad"`
+	FormaContagio string `json:"forma"`
 	Estado string `json:"estado"`
 }
 
@@ -60,7 +59,7 @@ func main() {
 		}
 
 		fmt.Println("Completar la siguiente información")
-		/*
+		
 		fmt.Println("URL balanceador:")
 		fmt.Scanln(&url)
 		fmt.Println("Cantidad de hilos:")
@@ -69,11 +68,13 @@ func main() {
 		fmt.Scanln(&num_solicitudes)
 		fmt.Println("Ruta del Archivo:")
 		fmt.Scanln(&ruta_archivo)
-		*/
-		url = "http://localhost:3000/"
+	
+		/*
+		url = "http://nginx.bredly.tk/"
 		num_hilos = 5
 		num_solicitudes = 10
 		ruta_archivo = "a.json"
+		*/
 
 		fmt.Printf("URL: %s, Hilos: %d, Solicitudes: %d, Archivo: %s\n",url,num_hilos,num_solicitudes,ruta_archivo);	
 		
@@ -105,7 +106,7 @@ func main() {
 		var misCasos []Caso
 		json.Unmarshal([]byte(contenido),&misCasos)
 
-		for x := 0; x < num_hilos; x++{
+		for x := 1; x <= num_hilos; x++{
 			go miHilo(x, num_solicitudes/num_hilos, misCasos, url)
 		}
 	}	
@@ -119,7 +120,7 @@ func miHilo(hiloActual int, casosAEnviar int, arregloCasos []Caso, url string){
 }
 
 func peticion(caso Caso, url string){
-	casoEnviar := CasoConvertido { caso.Nombre, caso.Departamento, caso.Edad, caso.FormaContagio, caso.Estado }
+	casoEnviar := CasoConvertido { caso.Nombre, caso.Departamento, strconv.Itoa(caso.Edad), caso.FormaContagio, caso.Estado }
 	jsonValue, _ := json.Marshal(casoEnviar)
 	resp, err := http.Post(url,"application/json",bytes.NewBuffer(jsonValue))
     if(err != nil){
